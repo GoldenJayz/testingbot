@@ -1,0 +1,19 @@
+{
+  "name": "discord",
+  "version": "12.5.0",
+  "description": "Discord bot",
+  "main": "testbot.js",
+  "scripts": {
+    "test": "node testbot.js",
+    "start": "node testbot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "Gold#1337",
+  "license": "ISC"
+}
