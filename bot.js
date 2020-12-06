@@ -18,6 +18,9 @@ client.on('message', msg => {
     if(msg.content.startsWith(`${prefix}ban`)) {
         ban(msg);
     }
+    if(msg.content.startsWith(`${prefix}kick`)) {
+        kick(msg);
+    }
 });
 
 async function help(message) {
@@ -39,12 +42,50 @@ async function ban(message) {
             message.channel.send(`Banned ${member}`);
         })
         .catch(err => {
-            message.channel.send(`There was an issue kicking ${member}`);
+            message.channel.send(`There was an issue banning ${member}`);
             console.error(err);
         });
     } else {
         message.channel.send("The member is not inside of the guild!")
     } 
 };
+
+async function kick(message) {
+    if(!message.guild) return message.channel.send("You need to be in a guild!");
+    const user = message.mentions.users.first();
+    if(user) {
+        const member = message.guild.member(user);
+        member
+        .kick()
+        .then(() => {
+            message.channel.send(`Kicked ${member}`);
+        })
+        .catch(err => {
+            message.channel.send(`There was an issue kicking ${member}`);
+            console.error(err);
+        });
+    } else {
+        message.channel.send("The member is not inside of the guild!");
+    }
+};
+
+async function unban(message, args) {
+    if(!message.author.hasPermission("BAN_MEMBERS")) {
+        return message.channel.send(`You do not have the ban members permissions!`)
+    } else {
+        let userid = args[0];
+        message.guild.fetchBans()
+        .then(bans => {
+            if(bans.size == 0) {
+                return message.channel.send("There is no bans!")
+            } else {
+                await message.guild.members.unban(userid);
+                await message.channel.send(`Unbanned ${userid}`);
+            }
+        });
+    }
+};
+
+
 
 client.login("nope")
